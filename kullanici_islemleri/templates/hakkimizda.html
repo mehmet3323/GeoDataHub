@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hakkımızda - GeoDataHub</title>
+    <link rel="stylesheet" href="{% static 'css/hakkimizda.css' %}" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/logo.jpg' %}" alt="GeoDataHub Logo" />
+        <h2>GeoDataHub</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
+          <li><a href="{% url 'sehirler' %}">Şehirler</a></li>
+          <li><a href="{% url 'haberler' %}">Haberler</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="hero-section">
+        <h1>Hakkımızda</h1>
+        <p>
+          GeoDataHub, çevresel verileri analiz ederek şehirlerimizin
+          sürdürülebilirliğine katkı sağlamak amacıyla kurulmuş bir platformdur.
+        </p>
+      </section>
+      <section class="content-section">
+        <h2>Neler Yapıyoruz?</h2>
+        <div class="feature-cards">
+          <div class="feature-card">
+            <h3>Hava Kirlilik Takibi</h3>
+            <p>
+              Şehirlerimizdeki hava kirliliği seviyelerini ölçerek anlık veriler
+              sunuyoruz. Sağlığınıza önem veriyor ve daha temiz bir hava için
+              farkındalık yaratıyoruz.
+            </p>
+            <img
+              src="{% static 'images/air_quality.jpg' %}"
+              alt="Hava Kirliliği İzleme"
+            />
+          </div>
+          <div class="feature-card">
+            <h3>Su Doluluk Oranı İzleme</h3>
+            <p>
+              Su kaynaklarının doluluk oranlarını düzenli olarak izliyor ve
+              verileri halkımızla paylaşıyoruz. Su kaynaklarımızı korumaya
+              yönelik adımlar atıyoruz.
+            </p>
+            <img
+              src="{% static 'images/water_reservoir.jpg' %}"
+              alt="Su Doluluk Oranı İzleme"
+            />
+          </div>
+          <div class="feature-card">
+            <h3>Veri Analizi ve Raporlama</h3>
+            <p>
+              Topladığımız verileri analiz ediyor, raporluyor ve bu verilerin
+              toplum yararına kullanılmasını sağlıyoruz. Bilimsel verilerle
+              şeffaf bir yaklaşım benimsiyoruz.
+            </p>
+            <img
+              src="{% static 'images/data_analysis.jpg' %}"
+              alt="Veri Analizi"
+            />
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2024 GeoDataHub | Tüm Hakları Saklıdır</p>
+    </footer>
+  </body>
+</html>
