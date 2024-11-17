@@ -1,0 +1,253 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üst Menü Tasarımı</title>
+    <style>
+   
+    </style>
+</head>
+<body>
+
+    <!-- Üst Menü (Navbar) -->
+    <div class="navbar">
+       
+        
+        <ul class="menu">
+          <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
+          <li><a href="{% url 'haberler' %}">Haberler</a></li>
+          <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
+        </ul>
+        <div class="search-box">
+            <input type="text" placeholder="Arama yap...">
+            <button>🔍</button>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+<head>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/sehirler.css' %}"
+    />
+    <style>
+       
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <!-- Grafiklerin yan yana olması için container -->
+    <div id="charts-container">
+        <!-- Su doluluk oranı grafiği -->
+        <div id="water-level-chart-container" class="chart-container">
+          <div class="chart-title">Su Doluluk Oranı ve Yıllık Değişimi</div>
+          <canvas id="water-level-chart"></canvas>
+        </div>
+
+        <!-- Pasta grafiği -->
+        <div id="pie-chart-container" class="chart-container">
+          <div class="chart-title">Şehirlerin Su Doluluk Oranı</div>
+          <canvas id="pie-chart"></canvas>
+        </div>
+    </div>
+
+    <script>
+      // Haritayı başlat
+      const map = L.map("map").setView([39.0, 35.0], 6); // Türkiye koordinatları ve zoom seviyesi
+
+      // Harita katmanını ekle
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // Türkiye'deki tüm şehirler ve koordinatları
+      const cities = [
+      { name: "Adana", coords: [37.0, 35.3213] },
+      { name: "Adıyaman", coords: [37.7648, 38.2786] },
+      { name: "Afyonkarahisar", coords: [38.7638, 30.5403] },
+      { name: "Ağrı", coords: [39.7191, 43.0519] },
+      { name: "Amasya", coords: [40.6539, 35.8333] },
+      { name: "Ankara", coords: [39.9334, 32.8597] },
+      { name: "Antalya", coords: [36.8969, 30.7133] },
+      { name: "Artvin", coords: [41.1828, 41.8183] },
+      { name: "Aydın", coords: [37.8444, 27.8458] },
+      { name: "Balıkesir", coords: [39.6484, 27.8826] },
+      { name: "Bilecik", coords: [40.0567, 30.0665] },
+      { name: "Bingöl", coords: [39.0626, 40.7696] },
+      { name: "Bitlis", coords: [38.3939, 42.1234] },
+      { name: "Bolu", coords: [40.735, 31.6065] },
+      { name: "Burdur", coords: [37.7203, 30.2908] },
+      { name: "Bursa", coords: [40.1828, 29.0665] },
+      { name: "Çanakkale", coords: [40.1553, 26.4142] },
+      { name: "Çankırı", coords: [40.6013, 33.6134] },
+      { name: "Çorum", coords: [40.5506, 34.9556] },
+      { name: "Denizli", coords: [37.7765, 29.0864] },
+      { name: "Diyarbakır", coords: [37.9144, 40.2306] },
+      { name: "Edirne", coords: [41.6771, 26.555] },
+      { name: "Elazığ", coords: [38.6807, 39.2264] },
+      { name: "Erzincan", coords: [39.75, 39.5] },
+      { name: "Erzurum", coords: [39.9043, 41.2679] },
+      { name: "Eskişehir", coords: [39.7667, 30.5256] },
+      { name: "Gaziantep", coords: [37.0662, 37.3833] },
+      { name: "Giresun", coords: [40.9128, 38.3895] },
+      { name: "Gümüşhane", coords: [40.4608, 39.4817] },
+      { name: "Hakkari", coords: [37.5744, 43.7408] },
+      { name: "Hatay", coords: [36.4018, 36.3498] },
+      { name: "Isparta", coords: [37.7644, 30.5563] },
+      { name: "Mersin", coords: [36.8121, 34.6415] },
+      { name: "İstanbul", coords: [41.0082, 28.9784] },
+      { name: "İzmir", coords: [38.4237, 27.1428] },
+      { name: "Kars", coords: [40.6019, 43.0975] },
+      { name: "Kastamonu", coords: [41.3887, 33.7827] },
+      { name: "Kayseri", coords: [38.7322, 35.4853] },
+      { name: "Kırklareli", coords: [41.735, 27.225] },
+      { name: "Kırşehir", coords: [39.1428, 34.1709] },
+      { name: "Kocaeli", coords: [40.8533, 29.8815] },
+      { name: "Konya", coords: [37.8746, 32.4932] },
+      { name: "Kütahya", coords: [39.4167, 29.9833] },
+      { name: "Malatya", coords: [38.3552, 38.3095] },
+      { name: "Manisa", coords: [38.6191, 27.4289] },
+      { name: "Kahramanmaraş", coords: [37.5753, 36.9374] },
+      { name: "Mardin", coords: [37.3122, 40.735] },
+      { name: "Muğla", coords: [37.2153, 28.3636] },
+      { name: "Muş", coords: [38.9462, 41.7539] },
+      { name: "Nevşehir", coords: [38.6244, 34.7239] },
+      { name: "Niğde", coords: [37.9667, 34.6833] },
+      { name: "Ordu", coords: [40.9863, 37.8793] },
+      { name: "Rize", coords: [41.0201, 40.5234] },
+      { name: "Sakarya", coords: [40.7569, 30.3781] },
+      { name: "Samsun", coords: [41.2867, 36.33] },
+      { name: "Siirt", coords: [37.9274, 41.9409] },
+      { name: "Sinop", coords: [42.0264, 35.155] },
+      { name: "Sivas", coords: [39.7477, 37.0179] },
+      { name: "Tekirdağ", coords: [40.978, 27.511] },
+      { name: "Tokat", coords: [40.3167, 36.55] },
+      { name: "Trabzon", coords: [41.0015, 39.7178] },
+      { name: "Tunceli", coords: [39.3074, 39.4388] },
+      { name: "Şanlıurfa", coords: [37.1674, 38.7955] },
+      { name: "Uşak", coords: [38.6823, 29.4082] },
+      { name: "Van", coords: [38.5012, 43.4167] },
+      { name: "Yalova", coords: [40.65, 29.2769] },
+      { name: "Yozgat", coords: [39.82, 34.8044] },
+      { name: "Zonguldak", coords: [41.4564, 31.7987] }
+      ];
+
+      // Şehir marker'larını ekleyip popupları bağla
+      cities.forEach(city => {
+        L.marker(city.coords)
+          .addTo(map)
+          .bindPopup(<b>${city.name}</b>);
+      });
+
+      // Su doluluk oranı verileri 
+      const waterLevelsData = {
+        labels: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
+        datasets: [{
+          label: 'Su Doluluk Oranı (%)',
+          data: [45, 50, 52, 60, 65, 70, 75, 80],
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          fill: true,
+          tension: 0.4
+        }]
+      };
+
+      // Çizgi grafiği oluştur
+      const ctx = document.getElementById('water-level-chart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: waterLevelsData,
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: false,
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Yıl'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Su Doluluk Oranı (%)'
+              },
+              min: 0,
+              max: 100
+            }
+          }
+        }
+      });
+
+      // Pasta grafiği verileri
+      const pieChartData = {
+        labels: ['2018', '2019', '2020', '2021', '2022'],
+        datasets: [{
+          label: 'Şehirlerin Su Doluluk Oranı',
+          data: [45, 50, 60, 55, 65],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)', 
+            'rgba(54, 162, 235, 0.6)', 
+            'rgba(255, 206, 86, 0.6)', 
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+
+      // Pasta grafiği oluştur
+      const pieCtx = document.getElementById('pie-chart').getContext('2d');
+      new Chart(pieCtx, {
+        type: 'pie',
+        data: pieChartData,
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: false,
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  let label = context.label || '';
+                  if (label) label += ': ';
+                  label += ${context.raw}%;
+                  return label;
+                }
+              }
+            }
+          }
+        }
+      });
+    </script>
+</body>
