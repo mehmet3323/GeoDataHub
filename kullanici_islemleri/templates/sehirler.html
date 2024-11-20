@@ -62,6 +62,14 @@
           <canvas id="pie-chart"></canvas>
         </div>
     </div>
+    <div id="charts-container">
+      <!-- Hava Kirliliği grafiği -->
+      <div id="air-pollition-chart-container" class="chart-container">
+        <div class="chart-title">Hava Kirliliği ve Yıllık Değişimi</div>
+        <!--<canvas id="air-pollition-chart"></canvas>-->
+        <canvas id="havaKirliligiGrafik1" width="400" height="400"></canvas>
+      </div>
+  </div>
 
     <script>
       // Haritayı başlat
@@ -150,7 +158,7 @@
       cities.forEach(city => {
         L.marker(city.coords)
           .addTo(map)
-          .bindPopup(<b>${city.name}</b>);
+          .bindPopup(`<b>${city.name}</b>`);
       });
 
       // Su doluluk oranı verileri 
@@ -241,7 +249,7 @@
                 label: (context) => {
                   let label = context.label || '';
                   if (label) label += ': ';
-                  label += ${context.raw}%;
+                  label += `${context.raw}%`;
                   return label;
                 }
               }
@@ -249,5 +257,22 @@
           }
         }
       });
+      const ctxHava1 = document.getElementById('havaKirliligiGrafik1').getContext('2d');
+        const havaKirliligiGrafik1 = new Chart(ctxHava1, {
+            type: 'line',
+            data: {
+                labels: ['Ocak', 'Şubat', 'Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
+                datasets: [{
+                    label: 'PM10 Seviyesi',
+                    data: [30, 35, 40, 25, 70, 45, 20, 65],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
     </script>
 </body>

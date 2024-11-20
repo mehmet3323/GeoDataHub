@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Haberler - GeoDataHub</title>
+    <link rel="stylesheet" href="{% static 'css/haberler.css' %}" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <img src="{% static 'images/logo.jpg' %}" alt="GeoDataHub Logo" />
+        <h2>GeoDataHub</h2>
+      </div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
+          <li><a href="{% url 'sehirler' %}">Harita</a></li>
+          <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section class="news-section">
+        <h1>Güncel Haberler</h1>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 GeoDataHub | Tüm Hakları Saklıdır</p>
+    </footer>
+  </body>
+</html>
