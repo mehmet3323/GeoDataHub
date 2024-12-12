@@ -27,6 +27,8 @@ urlpatterns = [
     path("sehirler/", views.sehirler, name="sehirler"),  # Şehirler sayfası
     path("haberler/", views.haberler, name="haberler"),  # Haberler sayfası
     path("hakkimizda/", views.hakkimizda, name="hakkimizda"),  # Hakkımızda sayfası
+    path("havaKalitesi/", views.havaKalitesi, name="havaKalitesi"),  # Hakkımızda sayfası
+    
 ]
 
 # Statik dosyaların ve medya dosyalarının doğru şekilde sunulabilmesi için eklemeler

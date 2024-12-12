@@ -25,9 +25,12 @@
           <img src="{% static 'images/logo.jpg' %}" alt="GeoDataHub Logo" />
         </div>
         <ul class="nav-links">
-          <li><a href="{% url 'sehirler' %}">Harita</a></li>
+          <li><a href="{% url 'sehirler' %}">Su Doluluk Oranı</a></li>
+          <li><a href="{% url 'havaKalitesi' %}">Hava Kalitesi</a></li>   
           <li><a href="{% url 'haberler' %}">Haberler</a></li>
           <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
+         
+
         </ul>
         <div class="search-container">
           <input type="text" placeholder="Search" />

@@ -8,4 +8,6 @@ urlpatterns = [
     path('haberler/', views.haberler_view, name='haberler'),  # Haberler için rota
     path('sehirler/', views.sehirler, name='sehirler'),  # Şehirler için rota
     path('hakkimizda/', views.hakkimizda, name='hakkimizda'),  # Hakkımızda için rota
+    path('havaKalitesi/', views.havaKalitesi, name='havaKalitesi'),  # Hakkımızda için rota
+    
 ]

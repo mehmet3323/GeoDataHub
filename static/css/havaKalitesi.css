@@ -1,0 +1,113 @@
+ /* Harita ve genel stil */
+ #map {
+    height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+}
+
+/* Grafiklerin yan yana düzeni */
+#charts-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Grafik kartları */
+.chart-container {
+    width: 48%;
+    height: 400px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Başlık stili */
+.chart-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333333;
+}
+     /* Genel ayarlar */
+     * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Üst Menü Tasarımı */
+    .navbar {
+        background-color: #333;
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        justify-content: space-between;
+    }
+
+    .navbar .logo {
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .navbar .menu {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+
+    .navbar .menu li a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 8px 15px;
+        transition: background 0.3s;
+    }
+
+    .navbar .menu li a:hover {
+        background-color: #555;
+        border-radius: 4px;
+    }
+
+    /* Arama Çubuğu Tasarımı */
+    .search-box {
+        position: relative;
+    }
+
+    .search-box input[type="text"] {
+        padding: 8px 15px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+    }
+
+    .search-box button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: #555;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        cursor: pointer;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        transition: background 0.3s;
+    }
+
+    .search-box button:hover {
+        background-color: #777;
+    }

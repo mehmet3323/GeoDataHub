@@ -20,7 +20,7 @@
         
         <ul class="menu">
           <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
-          <li><a href="{% url 'havaKalitesi' %}">Hava Kalitesi</a></li> 
+          <li><a href="{% url 'sehirler' %}">Su Doluluk Oranı</a></li>
           <li><a href="{% url 'haberler' %}">Haberler</a></li>
           <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
         </ul>
@@ -53,13 +53,13 @@
     <div id="charts-container">
         <!-- Su doluluk oranı grafiği -->
         <div id="water-level-chart-container" class="chart-container">
-          <div class="chart-title">Su Doluluk Oranı ve Yıllık Değişimi</div>
+          <div class="chart-title">Hava Kalitesi ve Yıllık Değişimi</div>
           <canvas id="water-level-chart"></canvas>
         </div>
 
         <!-- Pasta grafiği -->
         <div id="pie-chart-container" class="chart-container">
-          <div class="chart-title">Şehirlerin Su Doluluk Oranı</div>
+          <div class="chart-title">Şehirlerin Hava kirliliği Oranı</div>
           <canvas id="pie-chart"></canvas>
         </div>
     </div>

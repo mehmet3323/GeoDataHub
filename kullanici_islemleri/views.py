@@ -20,3 +20,8 @@ def haberler(request):
 # Hakkımızda page view
 def hakkimizda(request):
     return render(request, "hakkimizda.html")
+
+# havaKalitesi page view
+def havaKalitesi(request):
+    return render(request, "havaKalitesi.html")
+
