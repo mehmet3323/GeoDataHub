@@ -1,113 +1,177 @@
- /* Harita ve genel stil */
- #map {
-    height: 600px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    margin-bottom: 20px;
+/* Genel ayarlar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-/* Grafiklerin yan yana düzeni */
-#charts-container {
+body {
+    background-color: #f5f5f5;
+    padding-top: 80px;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Üst Menü Tasarımı */
+.navbar {
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
     display: flex;
+    align-items: center;
+    padding: 15px 20px;
     justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Grafik kartları */
-.chart-container {
-    width: 48%;
-    height: 400px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+.navbar .menu {
+    list-style: none;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    gap: 20px;
+}
+
+.navbar .menu li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 8px 15px;
+    transition: background 0.3s;
+    border-radius: 4px;
+}
+
+.navbar .menu li a:hover {
+    background-color: #555;
+}
+
+/* Arama Çubuğu */
+.search-box {
+    position: relative;
+    display: flex;
     align-items: center;
 }
 
-/* Başlık stili */
-.chart-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #333333;
+.search-box input[type="text"] {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    width: 200px;
 }
-     /* Genel ayarlar */
-     * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
 
-    /* Üst Menü Tasarımı */
-    .navbar {
-        background-color: #333;
-        display: flex;
-        align-items: center;
-        padding: 10px 20px;
-        justify-content: space-between;
-    }
+.search-box button {
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+}
 
-    .navbar .logo {
-        color: #fff;
-        font-size: 24px;
-        font-weight: bold;
-        text-decoration: none;
-    }
+/* Harita Konteyner */
+.map-container {
+    width: 100%;
+    height: calc(100vh - 200px);
+    padding: 20px;
+    position: relative;
+}
 
+#map {
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
+
+/* Hava Kalitesi Göstergeleri */
+.air-quality-legend {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 999;
+}
+
+.air-quality-legend h4 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.legend-label {
+    font-size: 12px;
+    color: #666;
+}
+
+.good { background-color: #00ff00; }
+.moderate { background-color: #ffff00; }
+.unhealthy { background-color: #ff9900; }
+.very-unhealthy { background-color: #ff0000; }
+
+/* Grafik Konteyner */
+#charts-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    min-height: 400px;
+}
+
+.chart-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Responsive Tasarım */
+@media (max-width: 768px) {
+    #charts-container {
+        flex-direction: column;
+    }
+    
+    .chart-container {
+        width: 100%;
+    }
+    
     .navbar .menu {
-        list-style: none;
-        display: flex;
-        gap: 20px;
+        display: none;
     }
-
-    .navbar .menu li a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 18px;
-        padding: 8px 15px;
-        transition: background 0.3s;
-    }
-
-    .navbar .menu li a:hover {
-        background-color: #555;
-        border-radius: 4px;
-    }
-
-    /* Arama Çubuğu Tasarımı */
-    .search-box {
-        position: relative;
-    }
-
+    
     .search-box input[type="text"] {
-        padding: 8px 15px;
-        font-size: 16px;
-        border: none;
-        border-radius: 4px;
-        outline: none;
+        width: 150px;
     }
-
-    .search-box button {
-        position: absolute;
-        right: 0;
-        top: 0;
-        background-color: #555;
-        color: #fff;
-        border: none;
-        padding: 8px 15px;
-        cursor: pointer;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-        transition: background 0.3s;
-    }
-
-    .search-box button:hover {
-        background-color: #777;
-    }
+}

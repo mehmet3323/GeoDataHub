@@ -1,28 +1,71 @@
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Üst Menü Tasarımı</title>
+    <title>Hava Kalitesi</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/havaKalitesi.css' %}" />
+    
     <style>
-   
+        .custom-marker {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .custom-marker:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+
+        .custom-popup {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+
+        .custom-popup h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .custom-popup .aqi-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .custom-popup .status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 5px 0;
+            color: white;
+        }
     </style>
 </head>
 <body>
-
     <!-- Üst Menü (Navbar) -->
     <div class="navbar">
-       
-        
         <ul class="menu">
-          <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
-          <li><a href="{% url 'sehirler' %}">Su Doluluk Oranı</a></li>
-          <li><a href="{% url 'haberler' %}">Haberler</a></li>
-          <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
+            <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
+            <li><a href="{% url 'sehirler' %}">Su Doluluk Oranı</a></li>
+            <li><a href="{% url 'haberler' %}">Haberler</a></li>
+            <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
         </ul>
         <div class="search-box">
             <input type="text" placeholder="Arama yap...">
@@ -30,243 +73,295 @@
         </div>
     </div>
 
-</body>
-</html>
-
-
-<head>
-    {% load static %}
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/sehirler.css' %}"
-    />
-    <style>
-       
-    </style>
-</head>
-
-<body>
-    <div id="map"></div>
+    <!-- Harita Container -->
+    <div class="map-container">
+        <div id="map"></div>
+        
+        <!-- Hava Kalitesi Göstergeleri Açıklaması -->
+        <div class="air-quality-legend">
+            <h4>Hava Kalitesi Seviyeleri</h4>
+            <div class="legend-item">
+                <div class="legend-color good"></div>
+                <span class="legend-label">İyi (0-35 µg/m³)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color moderate"></div>
+                <span class="legend-label">Orta (36-55 µg/m³)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color unhealthy"></div>
+                <span class="legend-label">Kötü (56-150 µg/m³)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color very-unhealthy"></div>
+                <span class="legend-label">Çok Kötü (>150 µg/m³)</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Grafiklerin yan yana olması için container -->
     <div id="charts-container">
-        <!-- Su doluluk oranı grafiği -->
-        <div id="water-level-chart-container" class="chart-container">
-          <div class="chart-title">Hava Kalitesi ve Yıllık Değişimi</div>
-          <canvas id="water-level-chart"></canvas>
+        <!-- Hava kalitesi grafiği -->
+        <div id="air-quality-chart-container" class="chart-container">
+            <div class="chart-title">Hava Kalitesi ve Yıllık Değişimi</div>
+            <canvas id="air-quality-chart"></canvas>
         </div>
 
         <!-- Pasta grafiği -->
         <div id="pie-chart-container" class="chart-container">
-          <div class="chart-title">Şehirlerin Hava kirliliği Oranı</div>
-          <canvas id="pie-chart"></canvas>
+            <div class="chart-title">Şehirlerin Hava Kirliliği Oranı</div>
+            <canvas id="pie-chart"></canvas>
         </div>
     </div>
-  </div>
 
     <script>
-      // Haritayı başlat
-      const map = L.map("map").setView([39.0, 35.0], 6); // Türkiye koordinatları ve zoom seviyesi
+        // Türkiye'deki iller ve koordinatları
+        const cities = [
+            { name: "Adana", coords: [37.0, 35.3213] },
+            { name: "Adıyaman", coords: [37.7648, 38.2786] },
+            { name: "Afyonkarahisar", coords: [38.7638, 30.5403] },
+            { name: "Ağrı", coords: [39.7191, 43.0519] },
+            { name: "Amasya", coords: [40.6539, 35.8333] },
+            { name: "Ankara", coords: [39.9334, 32.8597] },
+            { name: "Antalya", coords: [36.8969, 30.7133] },
+            { name: "Artvin", coords: [41.1828, 41.8183] },
+            { name: "Aydın", coords: [37.8444, 27.8458] },
+            { name: "Balıkesir", coords: [39.6484, 27.8826] },
+            { name: "Bilecik", coords: [40.0567, 30.0665] },
+            { name: "Bingöl", coords: [39.0626, 40.7696] },
+            { name: "Bitlis", coords: [38.3939, 42.1234] },
+            { name: "Bolu", coords: [40.735, 31.6065] },
+            { name: "Burdur", coords: [37.7203, 30.2908] },
+            { name: "Bursa", coords: [40.1828, 29.0665] },
+            { name: "Çanakkale", coords: [40.1553, 26.4142] },
+            { name: "Çankırı", coords: [40.6013, 33.6134] },
+            { name: "Çorum", coords: [40.5506, 34.9556] },
+            { name: "Denizli", coords: [37.7765, 29.0864] },
+            { name: "Diyarbakır", coords: [37.9144, 40.2306] },
+            { name: "Edirne", coords: [41.6771, 26.555] },
+            { name: "Elazığ", coords: [38.6807, 39.2264] },
+            { name: "Erzincan", coords: [39.75, 39.5] },
+            { name: "Erzurum", coords: [39.9043, 41.2679] },
+            { name: "Eskişehir", coords: [39.7667, 30.5256] },
+            { name: "Gaziantep", coords: [37.0662, 37.3833] },
+            { name: "Giresun", coords: [40.9128, 38.3895] },
+            { name: "Gümüşhane", coords: [40.4608, 39.4817] },
+            { name: "Hakkari", coords: [37.5744, 43.7408] },
+            { name: "Hatay", coords: [36.4018, 36.3498] },
+            { name: "Isparta", coords: [37.7644, 30.5563] },
+            { name: "Mersin", coords: [36.8121, 34.6415] },
+            { name: "İstanbul", coords: [41.0082, 28.9784] },
+            { name: "İzmir", coords: [38.4237, 27.1428] },
+            { name: "Kars", coords: [40.6019, 43.0975] },
+            { name: "Kastamonu", coords: [41.3887, 33.7827] },
+            { name: "Kayseri", coords: [38.7322, 35.4853] },
+            { name: "Kırklareli", coords: [41.735, 27.225] },
+            { name: "Kırşehir", coords: [39.1428, 34.1709] },
+            { name: "Kocaeli", coords: [40.8533, 29.8815] },
+            { name: "Konya", coords: [37.8746, 32.4932] },
+            { name: "Kütahya", coords: [39.4167, 29.9833] },
+            { name: "Malatya", coords: [38.3552, 38.3095] },
+            { name: "Manisa", coords: [38.6191, 27.4289] },
+            { name: "Kahramanmaraş", coords: [37.5753, 36.9374] },
+            { name: "Mardin", coords: [37.3122, 40.735] },
+            { name: "Muğla", coords: [37.2153, 28.3636] },
+            { name: "Muş", coords: [38.9462, 41.7539] },
+            { name: "Nevşehir", coords: [38.6244, 34.7239] },
+            { name: "Niğde", coords: [37.9667, 34.6833] },
+            { name: "Ordu", coords: [40.9863, 37.8793] },
+            { name: "Rize", coords: [41.0201, 40.5234] },
+            { name: "Sakarya", coords: [40.7569, 30.3781] },
+            { name: "Samsun", coords: [41.2867, 36.33] },
+            { name: "Siirt", coords: [37.9274, 41.9409] },
+            { name: "Sinop", coords: [42.0264, 35.155] },
+            { name: "Sivas", coords: [39.7477, 37.0179] },
+            { name: "Tekirdağ", coords: [40.978, 27.511] },
+            { name: "Tokat", coords: [40.3167, 36.55] },
+            { name: "Trabzon", coords: [41.0015, 39.7178] },
+            { name: "Tunceli", coords: [39.3074, 39.4388] },
+            { name: "Şanlıurfa", coords: [37.1674, 38.7955] },
+            { name: "Uşak", coords: [38.6823, 29.4082] },
+            { name: "Van", coords: [38.5012, 43.4167] },
+            { name: "Yozgat", coords: [39.82, 34.8044] },
+            { name: "Zonguldak", coords: [41.4564, 31.7987] },
+            { name: "Aksaray", coords: [38.3687, 34.0370] },
+            { name: "Bayburt", coords: [40.2552, 40.2249] },
+            { name: "Karaman", coords: [37.1759, 33.2287] },
+            { name: "Kırıkkale", coords: [39.8468, 33.5153] },
+            { name: "Batman", coords: [37.8812, 41.1351] },
+            { name: "Şırnak", coords: [37.5164, 42.4611] },
+            { name: "Bartın", coords: [41.6344, 32.3375] },
+            { name: "Ardahan", coords: [41.1105, 42.7022] },
+            { name: "Iğdır", coords: [39.9167, 44.0333] },
+            { name: "Yalova", coords: [40.6500, 29.2667] },
+            { name: "Karabük", coords: [41.2061, 32.6204] },
+            { name: "Kilis", coords: [36.7184, 37.1212] },
+            { name: "Osmaniye", coords: [37.0742, 36.2467] },
+            { name: "Düzce", coords: [40.8438, 31.1565] }
+        ];
 
-      // Harita katmanını ekle
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
+        // Haritayı başlat
+        const map = L.map("map").setView([39.0, 35.0], 6);
 
-      // Türkiye'deki tüm şehirler ve koordinatları
-      const cities = [
-      { name: "Adana", coords: [37.0, 35.3213] },
-      { name: "Adıyaman", coords: [37.7648, 38.2786] },
-      { name: "Afyonkarahisar", coords: [38.7638, 30.5403] },
-      { name: "Ağrı", coords: [39.7191, 43.0519] },
-      { name: "Amasya", coords: [40.6539, 35.8333] },
-      { name: "Ankara", coords: [39.9334, 32.8597] },
-      { name: "Antalya", coords: [36.8969, 30.7133] },
-      { name: "Artvin", coords: [41.1828, 41.8183] },
-      { name: "Aydın", coords: [37.8444, 27.8458] },
-      { name: "Balıkesir", coords: [39.6484, 27.8826] },
-      { name: "Bilecik", coords: [40.0567, 30.0665] },
-      { name: "Bingöl", coords: [39.0626, 40.7696] },
-      { name: "Bitlis", coords: [38.3939, 42.1234] },
-      { name: "Bolu", coords: [40.735, 31.6065] },
-      { name: "Burdur", coords: [37.7203, 30.2908] },
-      { name: "Bursa", coords: [40.1828, 29.0665] },
-      { name: "Çanakkale", coords: [40.1553, 26.4142] },
-      { name: "Çankırı", coords: [40.6013, 33.6134] },
-      { name: "Çorum", coords: [40.5506, 34.9556] },
-      { name: "Denizli", coords: [37.7765, 29.0864] },
-      { name: "Diyarbakır", coords: [37.9144, 40.2306] },
-      { name: "Edirne", coords: [41.6771, 26.555] },
-      { name: "Elazığ", coords: [38.6807, 39.2264] },
-      { name: "Erzincan", coords: [39.75, 39.5] },
-      { name: "Erzurum", coords: [39.9043, 41.2679] },
-      { name: "Eskişehir", coords: [39.7667, 30.5256] },
-      { name: "Gaziantep", coords: [37.0662, 37.3833] },
-      { name: "Giresun", coords: [40.9128, 38.3895] },
-      { name: "Gümüşhane", coords: [40.4608, 39.4817] },
-      { name: "Hakkari", coords: [37.5744, 43.7408] },
-      { name: "Hatay", coords: [36.4018, 36.3498] },
-      { name: "Isparta", coords: [37.7644, 30.5563] },
-      { name: "Mersin", coords: [36.8121, 34.6415] },
-      { name: "İstanbul", coords: [41.0082, 28.9784] },
-      { name: "İzmir", coords: [38.4237, 27.1428] },
-      { name: "Kars", coords: [40.6019, 43.0975] },
-      { name: "Kastamonu", coords: [41.3887, 33.7827] },
-      { name: "Kayseri", coords: [38.7322, 35.4853] },
-      { name: "Kırklareli", coords: [41.735, 27.225] },
-      { name: "Kırşehir", coords: [39.1428, 34.1709] },
-      { name: "Kocaeli", coords: [40.8533, 29.8815] },
-      { name: "Konya", coords: [37.8746, 32.4932] },
-      { name: "Kütahya", coords: [39.4167, 29.9833] },
-      { name: "Malatya", coords: [38.3552, 38.3095] },
-      { name: "Manisa", coords: [38.6191, 27.4289] },
-      { name: "Kahramanmaraş", coords: [37.5753, 36.9374] },
-      { name: "Mardin", coords: [37.3122, 40.735] },
-      { name: "Muğla", coords: [37.2153, 28.3636] },
-      { name: "Muş", coords: [38.9462, 41.7539] },
-      { name: "Nevşehir", coords: [38.6244, 34.7239] },
-      { name: "Niğde", coords: [37.9667, 34.6833] },
-      { name: "Ordu", coords: [40.9863, 37.8793] },
-      { name: "Rize", coords: [41.0201, 40.5234] },
-      { name: "Sakarya", coords: [40.7569, 30.3781] },
-      { name: "Samsun", coords: [41.2867, 36.33] },
-      { name: "Siirt", coords: [37.9274, 41.9409] },
-      { name: "Sinop", coords: [42.0264, 35.155] },
-      { name: "Sivas", coords: [39.7477, 37.0179] },
-      { name: "Tekirdağ", coords: [40.978, 27.511] },
-      { name: "Tokat", coords: [40.3167, 36.55] },
-      { name: "Trabzon", coords: [41.0015, 39.7178] },
-      { name: "Tunceli", coords: [39.3074, 39.4388] },
-      { name: "Şanlıurfa", coords: [37.1674, 38.7955] },
-      { name: "Uşak", coords: [38.6823, 29.4082] },
-      { name: "Van", coords: [38.5012, 43.4167] },
-      { name: "Yalova", coords: [40.65, 29.2769] },
-      { name: "Yozgat", coords: [39.82, 34.8044] },
-      { name: "Zonguldak", coords: [41.4564, 31.7987] }
-      ];
+        // Harita layer'ını ekle
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-      // Şehir marker'larını ekleyip popupları bağla
-      cities.forEach(city => {
-        L.marker(city.coords)
-          .addTo(map)
-          .bindPopup(`<b>${city.name}</b>`);
-      });
-
-      // Su doluluk oranı verileri 
-      const waterLevelsData = {
-        labels: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
-        datasets: [{
-          label: 'Su Doluluk Oranı (%)',
-          data: [45, 50, 52, 60, 65, 70, 75, 80],
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          fill: true,
-          tension: 0.4
-        }]
-      };
-
-      // Çizgi grafiği oluştur
-      const ctx = document.getElementById('water-level-chart').getContext('2d');
-      new Chart(ctx, {
-        type: 'line',
-        data: waterLevelsData,
-        options: {
-          responsive: true,
-          plugins: {
-            title: {
-              display: false,
-            },
-            tooltip: {
-              mode: 'index',
-              intersect: false,
-            }
-          },
-          scales: {
-            x: {
-              title: {
-                display: true,
-                text: 'Yıl'
-              }
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Su Doluluk Oranı (%)'
-              },
-              min: 0,
-              max: 100
-            }
-          }
-        }
-      });
-
-      // Pasta grafiği verileri
-      const pieChartData = {
-        labels: ['2018', '2019', '2020', '2021', '2022'],
-        datasets: [{
-          label: 'Şehirlerin Su Doluluk Oranı',
-          data: [45, 50, 60, 55, 65],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.6)', 
-            'rgba(54, 162, 235, 0.6)', 
-            'rgba(255, 206, 86, 0.6)', 
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(153, 102, 255, 0.6)'
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)'
-          ],
-          borderWidth: 1
-        }]
-      };
-
-      // Pasta grafiği oluştur
-      const pieCtx = document.getElementById('pie-chart').getContext('2d');
-      new Chart(pieCtx, {
-        type: 'pie',
-        data: pieChartData,
-        options: {
-          responsive: true,
-          plugins: {
-            title: {
-              display: false,
-            },
-            tooltip: {
-              callbacks: {
-                label: (context) => {
-                  let label = context.label || '';
-                  if (label) label += ': ';
-                  label += `${context.raw}%`;
-                  return label;
-                }
-              }
-            }
-          }
-        }
-      });
-      const ctxHava1 = document.getElementById('havaKirliligiGrafik1').getContext('2d');
-        const havaKirliligiGrafik1 = new Chart(ctxHava1, {
-            type: 'line',
-            data: {
-                labels: ['Ocak', 'Şubat', 'Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'],
-                datasets: [{
-                    label: 'PM10 Seviyesi',
-                    data: [30, 35, 40, 25, 70, 45, 20, 65],
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true
-            }
+        // Haritanın yeniden boyutlandırılması için event listener
+        window.addEventListener('load', function() {
+            map.invalidateSize();
         });
+
+        // Hava kalitesi verilerini çek ve haritada göster
+        async function getAirQualityData() {
+            try {
+                const chartData = {
+                    labels: [],
+                    values: [],
+                    colors: []
+                };
+
+                // Her şehir için hava kalitesi verilerini çek
+                for (const city of cities) {
+                    try {
+                        const response = await fetch(`https://api.waqi.info/feed/${city.name}/?token=7f1f5108826e9f676c64ca6fd92b74364d8aa2f5`);
+                        const data = await response.json();
+                        
+                        if (data.status === 'ok' && data.data.aqi) {
+                            const aqi = data.data.aqi;
+                            
+                            // AQI değerine göre renk ve durum belirleme
+                            let color = '#00ff00';
+                            let icon = 'fa-face-smile';
+                            let status = 'İyi';
+                            
+                            if (aqi > 50) {
+                                color = '#ffff00';
+                                icon = 'fa-face-meh';
+                                status = 'Orta';
+                            }
+                            if (aqi > 100) {
+                                color = '#ff9900';
+                                icon = 'fa-face-frown';
+                                status = 'Kötü';
+                            }
+                            if (aqi > 150) {
+                                color = '#ff0000';
+                                icon = 'fa-face-dizzy';
+                                status = 'Çok Kötü';
+                            }
+                            
+                            // Grafik verilerini ekle
+                            chartData.labels.push(city.name);
+                            chartData.values.push(aqi);
+                            chartData.colors.push(color);
+                            
+                            // Özel marker oluştur
+                            const customIcon = L.divIcon({
+                                className: 'custom-marker',
+                                html: `<div style="background-color: ${color}; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid white;">
+                                        <i class="fas ${icon}"></i>
+                                      </div>`,
+                                iconSize: [40, 40],
+                                iconAnchor: [20, 20],
+                                popupAnchor: [0, -20]
+                            });
+                            
+                            // Marker'ı ekle
+                            L.marker(city.coords, { icon: customIcon })
+                            .addTo(map)
+                            .bindPopup(`
+                                <div class="custom-popup">
+                                    <h3>${city.name}</h3>
+                                    <div class="aqi-value">AQI: ${aqi}</div>
+                                    <div class="status" style="background-color: ${color}">${status}</div>
+                                    <div style="margin-top: 10px;">
+                                        <i class="far fa-clock"></i> 
+                                        Son Güncelleme: ${new Date().toLocaleString('tr-TR')}
+                                    </div>
+                                </div>
+                            `, {
+                                className: 'custom-popup'
+                            });
+                        }
+                    } catch (error) {
+                        console.error(`${city.name} için veri alınamadı:`, error);
+                    }
+                }
+
+                // Grafikleri güncelle
+                updatePieChart(chartData);
+                updateLineChart(chartData);
+
+            } catch (error) {
+                console.error('Hava kalitesi verileri alınırken hata oluştu:', error);
+            }
+        }
+
+        // Pasta grafiğini güncelle
+        function updatePieChart(data) {
+            const ctx = document.getElementById('pie-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.values,
+                        backgroundColor: data.colors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.label}: ${context.raw} AQI`
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Çizgi grafiğini güncelle
+        function updateLineChart(data) {
+            const ctx = document.getElementById('air-quality-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Hava Kalitesi İndeksi (AQI)',
+                        data: data.values,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'AQI'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Sayfa yüklendiğinde verileri çek
+        getAirQualityData();
+
+        // Her 30 dakikada bir verileri güncelle
+        setInterval(getAirQualityData, 30 * 60 * 1000);
     </script>
 </body>
+</html>
