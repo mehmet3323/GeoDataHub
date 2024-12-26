@@ -28,7 +28,7 @@ urlpatterns = [
     path("haberler/", views.haberler, name="haberler"),  # Haberler sayfası
     path("hakkimizda/", views.hakkimizda, name="hakkimizda"),  # Hakkımızda sayfası
     path("havaKalitesi/", views.havaKalitesi, name="havaKalitesi"),  # Hakkımızda sayfası
-    
+    path("api/su-doluluk/", views.su_doluluk_api, name="su_doluluk_api"),  # Su doluluk API endpoint'i
 ]
 
 # Statik dosyaların ve medya dosyalarının doğru şekilde sunulabilmesi için eklemeler

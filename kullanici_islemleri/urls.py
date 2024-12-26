@@ -9,5 +9,5 @@ urlpatterns = [
     path('sehirler/', views.sehirler, name='sehirler'),  # Şehirler için rota
     path('hakkimizda/', views.hakkimizda, name='hakkimizda'),  # Hakkımızda için rota
     path('havaKalitesi/', views.havaKalitesi, name='havaKalitesi'),  # Hakkımızda için rota
-    
+    path('api/su-doluluk/', views.su_doluluk_api, name='su_doluluk_api'),
 ]

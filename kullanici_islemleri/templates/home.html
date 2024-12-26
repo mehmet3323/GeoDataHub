@@ -6,11 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ana Sayfa</title>
 
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/styles.css' %}"
-    />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
     <link rel="icon" href="{% static 'images/favicon.ico' %}" />
     <script src="{% static 'js/script.js' %}"></script>
   </head>
@@ -29,15 +25,11 @@
           <li><a href="{% url 'havaKalitesi' %}">Hava Kalitesi</a></li>   
           <li><a href="{% url 'haberler' %}">Haberler</a></li>
           <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
-         
-
         </ul>
         <div class="search-container">
           <input type="text" placeholder="Search" />
           <button type="submit">🔍</button>
         </div>
-
-        
         </div>
       </nav>
     </header>
@@ -47,7 +39,5 @@
         <p>Coğrafi Bilgi Sistemine Hoş Geldiniz!</p>
       </div>
     </main>
-
-    
   </body>
 </html>
