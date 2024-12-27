@@ -111,3 +111,191 @@
     .search-box button:hover {
         background-color: #777;
     }
+     #map {
+            height: 500px;
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+        .popup-content {
+            min-width: 250px;
+        }
+        .baraj-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        .baraj-table th, .baraj-table td {
+            padding: 5px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .baraj-table th {
+            background-color: #f5f5f5;
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .chart-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .custom-marker {
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .custom-marker:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+        .leaflet-popup-content {
+            margin: 13px;
+            font-family: Arial, sans-serif;
+        }
+        .leaflet-popup-content h3 {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .leaflet-popup-content p {
+            margin: 5px 0;
+            color: #34495e;
+        }
+        .leaflet-popup-content table {
+            margin-top: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .leaflet-popup-content th {
+            background: #3498db;
+            color: white;
+            padding: 8px;
+        }
+        .leaflet-popup-content td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .leaflet-popup-content tr:last-child td {
+            border-bottom: none;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+        }
+        .popup-content {
+            min-width: 250px;
+        }
+        .baraj-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        .baraj-table th, .baraj-table td {
+            padding: 5px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .baraj-table th {
+            background-color: #f5f5f5;
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .chart-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .custom-marker {
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .custom-marker:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+        }
+        .leaflet-popup-content {
+            margin: 13px;
+            font-family: Arial, sans-serif;
+        }
+        .leaflet-popup-content h3 {
+            color: #2c3e50;
+            margin: 0 0 10px 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .leaflet-popup-content p {
+            margin: 5px 0;
+            color: #34495e;
+        }
+        .leaflet-popup-content table {
+            margin-top: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .leaflet-popup-content th {
+            background: #3498db;
+            color: white;
+            padding: 8px;
+        }
+        .leaflet-popup-content td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .leaflet-popup-content tr:last-child td {
+            border-bottom: none;
+        }
