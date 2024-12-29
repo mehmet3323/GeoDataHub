@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import requests
-from .models import Sehir
 import json
 from datetime import datetime
+from kullanici_islemleri.models import UserActivity
 
+def log_user_action(user, action, details=None):
+    UserActivity.objects.create(user=user, action=action, details=details)
 
 # Home page view
 def home(request):
