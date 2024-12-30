@@ -1,26 +1,18 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-<<<<<<< Updated upstream
-import requests
-import json
-=======
 from .core.patterns.singleton.geo_analyzer import GeoAnalyzer
-from .core.patterns.factory.data_provider import DataProviderFactory
-from .core.patterns.observer.event_manager import EventManager
->>>>>>> Stashed changes
+from .core.patterns.factory.factory.data_provider import DataProviderFactory
+from .core.patterns.observer.observer.event_manager import EventManager
 from datetime import datetime
 from kullanici_islemleri.models import UserActivity
 
-<<<<<<< Updated upstream
 def log_user_action(user, action, details=None):
     UserActivity.objects.create(user=user, action=action, details=details)
-=======
 class BaseView:
     def __init__(self):
         self.analyzer = GeoAnalyzer()
         self.data_factory = DataProviderFactory()
         self.event_manager = EventManager()
->>>>>>> Stashed changes
 
 class HomeView(BaseView):
     def get(self, request):
