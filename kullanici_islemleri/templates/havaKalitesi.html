@@ -1,8 +1,10 @@
-<!DOCTYPE html>
 <html lang="tr">
 <head>
     {% load static %}
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modules/map.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modules/charts.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hava Kalitesi</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -10,68 +12,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/havaKalitesi.css' %}" />
-    
-    <style>
-        .custom-marker {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 20px;
-            color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            border: 2px solid white;
-            transition: all 0.3s ease;
-        }
-
-        .custom-marker:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-        }
-
-        .custom-popup {
-            font-family: Arial, sans-serif;
-            padding: 10px;
-        }
-
-        .custom-popup h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 5px;
-        }
-
-        .custom-popup .aqi-value {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .custom-popup .status {
-            padding: 5px 10px;
-            border-radius: 15px;
-            display: inline-block;
-            margin: 5px 0;
-            color: white;
-        }
-    </style>
 </head>
 <body>
-    <!-- Üst Menü (Navbar) -->
-    <div class="navbar">
-        <ul class="menu">
-            <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
-            <li><a href="{% url 'sehirler' %}">Su Doluluk Oranı</a></li>
-            <li><a href="{% url 'haberler' %}">Haberler</a></li>
-            <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
-        </ul>
-        <div class="search-box">
-            <input type="text" placeholder="Arama yap...">
-            <button>🔍</button>
-        </div>
-    </div>
+    {% include 'navbar.html' %}
+    
 
     <!-- Harita Container -->
     <div class="map-container">

@@ -3,28 +3,16 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modules/map.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modules/charts.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Su Doluluk Oranları</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/sehirler.css' %}" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-       
-    </style>
 </head>
 <body>
-    <!-- Üst Menü (Navbar) -->
-    <div class="navbar">
-        <ul class="menu">
-            <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
-            <li><a href="{% url 'havaKalitesi' %}">Hava Kalitesi</a></li> 
-            <li><a href="{% url 'haberler' %}">Haberler</a></li>
-            <li><a href="{% url 'hakkimizda' %}">Hakkımızda</a></li>
-        </ul>
-        <div class="search-box">
-            <input type="text" placeholder="Arama yap...">
-            <button>🔍</button>
-        </div>
-    </div>
+    {% include 'navbar.html' %}
 
     <div class="content">
         <h1>Türkiye Su Doluluk Oranları</h1>

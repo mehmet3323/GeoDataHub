@@ -1,35 +1,88 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+<<<<<<< Updated upstream
 import requests
 import json
+=======
+from .core.patterns.singleton.geo_analyzer import GeoAnalyzer
+from .core.patterns.factory.data_provider import DataProviderFactory
+from .core.patterns.observer.event_manager import EventManager
+>>>>>>> Stashed changes
 from datetime import datetime
 from kullanici_islemleri.models import UserActivity
 
+<<<<<<< Updated upstream
 def log_user_action(user, action, details=None):
     UserActivity.objects.create(user=user, action=action, details=details)
+=======
+class BaseView:
+    def __init__(self):
+        self.analyzer = GeoAnalyzer()
+        self.data_factory = DataProviderFactory()
+        self.event_manager = EventManager()
+>>>>>>> Stashed changes
 
-# Home page view
+class HomeView(BaseView):
+    def get(self, request):
+        return render(request, "home.html")
+
+class SehirlerView(BaseView):
+    def get(self, request):
+        return render(request, "sehirler.html")
+
+class HaberlerView(BaseView):
+    def get(self, request):
+        return render(request, "haberler.html")
+
+class HakkimizdaView(BaseView):
+    def get(self, request):
+        return render(request, "hakkimizda.html")
+
+class HavaKalitesiView(BaseView):
+    def get(self, request):
+        return render(request, "havaKalitesi.html")
+
+class SuDolulukAPIView(BaseView):
+    def get(self, request):
+        try:
+            # Factory Pattern kullanımı
+            water_provider = self.data_factory.create_provider("water")
+            data = water_provider.get_data()
+            
+            # Singleton Pattern kullanımı
+            for city in data:
+                analysis = self.analyzer.analyze_water_levels(city)
+                city["analysis"] = analysis
+                
+                # Observer Pattern kullanımı
+                if analysis["status"] == "Kritik":
+                    self.event_manager.notify("critical_water_level", {
+                        "city": city["adi"],
+                        "level": city["doluluk_orani"],
+                        "timestamp": datetime.now().isoformat()
+                    })
+            
+            return JsonResponse(data, safe=False)
+            
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+# Function-based views
 def home(request):
-    return render(request, "home.html")
+    return HomeView().get(request)
 
-
-# Sehirler page view
 def sehirler(request):
-    return render(request, "sehirler.html")
+    return SehirlerView().get(request)
 
-
-# Haberler page view
 def haberler(request):
-    return render(request, "haberler.html")
+    return HaberlerView().get(request)
 
-
-# Hakkımızda page view
 def hakkimizda(request):
-    return render(request, "hakkimizda.html")
+    return HakkimizdaView().get(request)
 
-# havaKalitesi page view
 def havaKalitesi(request):
-    return render(request, "havaKalitesi.html")
+    return HavaKalitesiView().get(request)
+
 
 # Su doluluk API endpoint
 def su_doluluk_api(request):

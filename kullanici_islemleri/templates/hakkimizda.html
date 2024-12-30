@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html lang="tr">
   <head>
-    {% load static %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hakkımızda - GeoDataHub</title>
-    <link rel="stylesheet" href="{% static 'css/hakkimizda.css' %}" />
-  </head>
-  <body>
-    <header class="navbar">
-      <div class="logo">
-        <img src="{% static 'images/logo.jpg' %}" alt="GeoDataHub Logo" />
-        <h2>GeoDataHub</h2>
-      </div>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="{% url 'home' %}">Ana Sayfa</a></li>
-          <li><a href="{% url 'havaKalitesi' %}">Hava Kalitesi</a></li> 
-          <li><a href="{% url 'sehirler' %}">Şehirler</a></li>
-          <li><a href="{% url 'haberler' %}">Haberler</a></li>
-        </ul>
-      </nav>
-    </header>
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+        {% load static %}
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/modules/map.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/modules/charts.css' %}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hakkımızda - GeoDataHub</title>
+        <link rel="stylesheet" href="{% static 'css/hakkimizda.css' %}" />
+    </head>
+    <body>
+        {% include 'navbar.html' %}
     <main>
       <section class="hero-section">
         <h1>Hakkımızda</h1>

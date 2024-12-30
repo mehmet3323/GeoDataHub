@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modules/map.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/modules/charts.css' %}" />
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+    {% block extra_css %}{% endblock %}
+    <title>{% block title %}GeoDataHub{% endblock %}</title>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{% static 'images/logo.jpg' %}" alt="GeoDataHub Logo" />
+            <h2>GeoDataHub</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}" {% if request.path == '/' %}class="active"{% endif %}>Ana Sayfa</a></li>
+            <li><a href="{% url 'sehirler' %}" {% if 'sehirler' in request.path %}class="active"{% endif %}>Su Doluluk Oranı</a></li>
+            <li><a href="{% url 'havaKalitesi' %}" {% if 'havaKalitesi' in request.path %}class="active"{% endif %}>Hava Kalitesi</a></li>
+            <li><a href="{% url 'haberler' %}" {% if 'haberler' in request.path %}class="active"{% endif %}>Haberler</a></li>
+            <li><a href="{% url 'hakkimizda' %}" {% if 'hakkimizda' in request.path %}class="active"{% endif %}>Hakkımızda</a></li>
+        </ul>
+        <div class="search-container">
+            <input type="text" placeholder="Arama..." id="searchInput" />
+            <button type="submit">🔍</button>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <p>&copy; 2024 GeoDataHub | Tüm Hakları Saklıdır</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

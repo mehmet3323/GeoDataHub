@@ -1,0 +1,35 @@
+/* Grafik modülü stilleri */
+.charts-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    margin: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+    flex: 1;
+    min-height: 400px;
+    padding: 20px;
+}
+
+.chart-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .charts-container {
+        flex-direction: column;
+    }
+    
+    .chart-container {
+        width: 100%;
+    }
+} 
