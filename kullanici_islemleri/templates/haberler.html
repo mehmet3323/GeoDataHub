@@ -14,13 +14,60 @@
     {% include 'navbar.html' %}
 
     <main>
-      <section class="news-section">
-        <h1>Güncel Haberler</h1>
-      </section>
+        <section class="news-section">
+            <h1>GeoDataHub Haberler</h1>
+            
+            
+
+            <!-- Haber Kartları -->
+            <div class="news-container">
+                {% for haber in haberler %}
+                <article class="news-card" data-id="{{ haber.id }}">
+                    <div class="news-content">
+                        <div class="news-meta">
+                            <span class="news-category">{{ haber.category }}</span>
+                            <span class="news-date">{{ haber.date }}</span>
+                        </div>
+                        <h2 class="news-title">{{ haber.title }}</h2>
+                        <p class="news-description">{{ haber.description }}</p>
+                        <div class="news-footer">
+                            <div class="source-links">
+                                <span class="news-source">{{ haber.source }}</span>
+                                <a href="{{ haber.source_url }}" class="source-link" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i>
+                                    Haber Kaynağı
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                {% empty %}
+                <div class="no-news">
+                    <p>Henüz haber bulunmamaktadır.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
     </main>
 
     <footer>
-      <p>&copy; 2024 GeoDataHub | Tüm Hakları Saklıdır</p>
+        <p>&copy; 2024 GeoDataHub | Tüm Hakları Saklıdır</p>
     </footer>
-  </body>
+
+    <!-- JavaScript for filter functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
 </html>

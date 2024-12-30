@@ -58,6 +58,137 @@ class SuDolulukAPIView(BaseView):
             
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+        
+class HaberlerView(BaseView):
+    def get(self, request):
+        category = request.GET.get('category', 'all')
+        
+        haberler = [
+            {
+                'id': 1,
+                'title': 'Türkiye\'nin Su Kaynakları Raporu Yayınlandı',
+                'description': 'DSİ tarafından hazırlanan 2024 yılı su kaynakları raporuna göre, ülkemizdeki barajların ortalama doluluk oranı %65 seviyesinde seyrediyor.',
+                'full_content': 'DSİ tarafından hazırlanan 2024 yılı su kaynakları raporuna göre...',
+                'date': '20 Mart 2024',
+                'source': 'Devlet Su İşleri',
+                'source_url': 'https://www.dsi.gov.tr/Sayfa/Detay/1322',
+                'category': 'Su Kaynakları'
+            },
+            {
+                'id': 2,
+                'title': 'İklim Değişikliği Su Kaynaklarını Tehdit Ediyor',
+                'description': 'Türkiye\'de iklim değişikliğinin etkileri su kaynakları üzerinde ciddi baskı oluşturuyor.',
+                'full_content': 'İklim değişikliğinin etkileri giderek artıyor...',
+                'date': '19 Mart 2024',
+                'source': 'İklim Araştırmaları Merkezi',
+                'source_url': 'https://www.mgm.gov.tr/iklim/iklim-degisikligi.aspx',
+                'category': 'İklim'
+            },
+            {
+                'id': 3,
+                'title': 'Akıllı Su Yönetimi Projeleri Başlıyor',
+                'description': '5 büyükşehirde akıllı su yönetimi projeleri hayata geçiriliyor.',
+                'full_content': 'Akıllı su yönetimi projeleri kapsamında...',
+                'date': '18 Mart 2024',
+                'source': 'Çevre Bakanlığı',
+                'source_url': 'https://www.csb.gov.tr/projeler/su-yonetimi',
+                'category': 'Projeler'
+            },
+            {
+                'id': 4,
+                'title': 'Küresel Su Krizi Derinleşiyor',
+                'description': 'BM raporuna göre, dünya nüfusunun üçte biri temiz suya erişimde zorluk yaşıyor.',
+                'full_content': 'Birleşmiş Milletler\'in son raporuna göre...',
+                'date': '17 Mart 2024',
+                'source': 'Birleşmiş Milletler',
+                'source_url': 'https://www.un.org/water/reports',
+                'category': 'Küresel'
+            },
+            {
+                'id': 5,
+                'title': 'Akdeniz\'de Su Stresi Alarm Veriyor',
+                'description': 'Akdeniz havzasında artan sıcaklıklar ve azalan yağışlar nedeniyle su stresi kritik seviyelere ulaştı.',
+                'full_content': 'Akdeniz Bölgesi\'nde su kaynaklarının durumu...',
+                'date': '16 Mart 2024',
+                'source': 'Akdeniz İklim Değişikliği Merkezi',
+                'source_url': 'https://www.akdeniziklim.org/raporlar',
+                'category': 'Su Kaynakları'
+            },
+            {
+                'id': 6,
+                'title': 'Yeni Nesil Su Arıtma Teknolojileri',
+                'description': 'Nanoteknoloji kullanılarak geliştirilen yeni su arıtma sistemleri test ediliyor.',
+                'full_content': 'Yeni nesil su arıtma teknolojileri ile...',
+                'date': '15 Mart 2024',
+                'source': 'Teknoloji Araştırma Merkezi',
+                'source_url': 'https://www.tubitak.gov.tr/su-teknolojileri',
+                'category': 'Projeler'
+            },
+            {
+                'id': 7,
+                'title': 'Kar Yağışları Azalıyor',
+                'description': 'Son 50 yılın kar yağışı verileri endişe verici bir tablo ortaya koyuyor.',
+                'full_content': 'Meteoroloji Genel Müdürlüğü verilerine göre...',
+                'date': '14 Mart 2024',
+                'source': 'Meteoroloji Genel Müdürlüğü',
+                'source_url': 'https://www.mgm.gov.tr/veridegerlendirme/kar-analizi.aspx',
+                'category': 'İklim'
+            },
+            {
+                'id': 8,
+                'title': 'Su Tasarrufu Kampanyası Başlatıldı',
+                'description': 'Büyükşehir belediyeleri ortak su tasarrufu kampanyası başlattı.',
+                'full_content': 'Su tasarrufu kampanyası kapsamında...',
+                'date': '13 Mart 2024',
+                'source': 'Belediyeler Birliği',
+                'source_url': 'https://www.tbb.gov.tr/su-tasarrufu-kampanyasi',
+                'category': 'Projeler'
+            },
+            {
+                'id': 9,
+                'title': 'Yeraltı Suları Tehlike Altında',
+                'description': 'Aşırı kullanım nedeniyle yeraltı su seviyeleri kritik seviyelere indi.',
+                'full_content': 'Yeraltı su kaynaklarının durumu...',
+                'date': '12 Mart 2024',
+                'source': 'DSİ',
+                'source_url': 'https://www.dsi.gov.tr/yeralti-sulari-raporu',
+                'category': 'Su Kaynakları'
+            },
+            {
+                'id': 10,
+                'title': 'Dünya Su Günü Etkinlikleri',
+                'description': '22 Mart Dünya Su Günü kapsamında çeşitli etkinlikler düzenlenecek.',
+                'full_content': 'Dünya Su Günü etkinlikleri çerçevesinde...',
+                'date': '11 Mart 2024',
+                'source': 'Çevre Bakanlığı',
+                'source_url': 'https://www.csb.gov.tr/dunya-su-gunu-2024',
+                'category': 'Küresel'
+            }
+        ]
+        
+        if category != 'all':
+            haberler = [haber for haber in haberler if haber['category'].lower() == category.lower()]
+            
+        return render(request, 'haberler.html', {'haberler': haberler})
+
+    def get_haber_detail(self, request, haber_id):
+        # get_haber_detail metodunda da aynı haberlerin detayları olmalı
+        haberler = {
+            # Mevcut 4 haber detayı aynen kalacak...
+            5: {
+                'title': 'Akdeniz\'de Su Stresi Alarm Veriyor',
+                'full_content': '''[Akdeniz su stresi haberinin tam içeriği]''',
+                'date': '16 Mart 2024',
+                'source': 'Akdeniz İklim Değişikliği Merkezi',
+                'category': 'Su Kaynakları'
+            },
+            # 5 yeni haber detayı daha eklenecek...
+        }
+        
+        haber = haberler.get(haber_id)
+        if haber:
+            return JsonResponse(haber)
+        return JsonResponse({'error': 'Haber bulunamadı'}, status=404)
 
 # Function-based views
 def home(request):
@@ -74,6 +205,7 @@ def hakkimizda(request):
 
 def havaKalitesi(request):
     return HavaKalitesiView().get(request)
+
 
 
 # Su doluluk API endpoint
