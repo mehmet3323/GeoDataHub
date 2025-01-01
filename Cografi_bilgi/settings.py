@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'GeoDataHub',      # Veritabanı adı
         'USER': 'postgres',       # Veritabanı kullanıcı adı
-        'PASSWORD': '2121',           # Veritabanı şifresi
+        'PASSWORD': '2003',           # Veritabanı şifresi
         'HOST': 'localhost',           # Veritabanı sunucusu (örneğin: localhost)
         'PORT': '5432',                # PostgreSQL varsayılan portu
     }
